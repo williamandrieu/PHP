@@ -13,30 +13,32 @@ class BDD{
 		}
 		catch(Exception $e)
 		{
-	        echo "Erreur lors de la connection à la bdd : "; echo $e;
+	        $this->alert("Erreur lors de la connection à la bdd : ".$e->getMessage());
 		}
 	}
 
 	public function getBdd(){return $this->bdd;}
 	public function getReq(){return $this->req;}
 
-	public function createUserReq(string $_nom,string $_prenom,string $_ddn,int $_sexe){
+	public function createUser(string $_nom,string $_prenom,string $_ddn,int $_sexe){
 		try
 		{
             $this->req = $this->bdd->prepare("INSERT INTO `utilisateur` (`nom`, `prenom`, `ddn`, `sexe`) VALUES ('".$_nom."', '".$_prenom."', '".$_ddn."', '".$_sexe."');");
-
-        }catch(Exception $e){
-            echo "Erreur lors de la preparation : ".$e;
+            $this->execute();
+        }catch(Exception $e)
+        {
+            $this->alert("Erreur lors de la création d'un utilisateur : ".$e->getMessage());
         }
 	}
 
-	public function delUserReq(int $_id){
+	public function delUser(int $_id){
 		try
 		{
             $this->req = $this->bdd->prepare("DELETE FROM `utilisateur` WHERE id = ".$_id);
-
-        }catch(Exception $e){
-            echo "Erreur lors de la preparation de la suppression : ".$e;
+            $this->execute();
+        }catch(Exception $e)
+        {
+            $this->alert("Erreur lors de la suppression d'un utilisateur : ".$e->getMessage());
         }
 	}
 
@@ -54,21 +56,24 @@ class BDD{
 			$reponse->closeCursor();
 			return $userArray;
 
-        }catch(Exception $e){
-            echo "Erreur lors de la preparation : ".$e;
+        }catch(Exception $e)
+        {
+        	$this->alert("Erreur lors de la recherche d'information User : ".$e->getMessage());
         }
-
-
-
         
 	}
 
-	public function execute(){
+	private function execute(){
 		try
 		{
 			$this->req->execute();
-		}catch(Exception $e){
-			echo "Erreur lors de l'execution : ".$e;
+		}catch(Exception $e)
+		{
+			$this->alert("Erreur lors de l'execution : ".$e->getMessage());
 		}
+	}
+
+	private function alert(string $message){
+		echo '<script>alert("'.$message.'")</script>';
 	}
 }
