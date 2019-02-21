@@ -46,7 +46,7 @@ class BDD{
         {
             $str = "";
             for ($i=0; $i < count($_colName); $i++) {
-                $str.="`".$_colName[$i]."`= `".$_colValue[$i]."`,";
+                $str.="`".$_colName[$i]."`= '".$_colValue[$i]."',";
             }
            $this->req = $this->bdd->prepare("UPDATE ".$_tableName." SET ".substr($str, 0,-1)."WHERE `id` = ".$_id);
            $this->execute();
@@ -90,26 +90,29 @@ class BDD{
         }
         
 	}
-
-	public function concatInfo(array $_tab1, string $_separator): array{
-		$new = [];
-		$sub = count_chars($_separator);
-		for ($i=0; $i < count($_tab1) ; $i++){
-			$str = "";
-			for ($y=0; $y < count($_tab1[$i]) ; $y++) { 
-				$str.= $_tab1[$i][$y].$_separator;
+	
+	public function getInfoBy(string $_tableName,array $_colName,string $_by,int $_id)
+	{
+		try
+		{
+			$infoArray = [];
+            $reponse = $this->bdd->query('SELECT * FROM '.$_tableName.' WHERE '.$_by.' ='.$_id);
+            while ($donnees = $reponse->fetch())
+			{
+				$rowArray = [];
+				foreach ($_colName as $key) {
+					$rowArray[] = $donnees[$key];
+				}
+				$infoArray[] = $rowArray;
 			}
-			$new[].= substr($str, 0,-intval($sub));
-		}
-		return $new;
-	}
+			$reponse->closeCursor();
+			return $infoArray;
 
-	public function merge(array $_tab1, array $_tab2): array{
-		$newTab = [];
-		for ($i=0; $i < count($_tab1); $i++) { 
-			$newTab[] = [$_tab1[$i],$_tab2[$i]];
-		}
-		return $newTab;
+        }catch(Exception $e)
+        {
+        	$this->alert("Erreur lors de la recherche d'information User : ".$e->getMessage());
+        }
+        
 	}
 
 	private function execute(){

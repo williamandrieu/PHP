@@ -13,8 +13,14 @@ class Form
 	public static function select(string $_idname ,string $_name, array $_selects)
 	{
 		$str = self::label($_idname, $_name).'<select id="'.$_idname.'" name="'.$_idname.'">';
-		foreach ($_selects as $id => $item) {
-			$str.= '<option value="'.$item[1].'">'.$item[0].'</option>';
+		for ($i=0; $i < count($_selects); $i++) { 
+			$name = "";
+			for ($y=0; $y <count($_selects[$i]) ; $y++) { 
+				if($y !=count($_selects[$i])-1){
+					$name.= $_selects[$i][$y]." ";
+				}
+			}
+			$str.= '<option value="'.$_selects[$i][count($_selects[$i])-1].'">'.substr($name, 0,-1).'</option>';
 		}
 		return  $str.= '</select><br>';
 	}

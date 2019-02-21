@@ -6,7 +6,7 @@ class TableGenerator{
 		for ($i=0;$i< count($tabValue);$i++) {
       		$str = "";
       		for ($y=0; $y < count($tabValue[$i]); $y++) { 
-          		$str.= "<th>".$tabValue[$i][$y]."</th>"; 
+          		$str.= '<th>'.$tabValue[$i][$y].'</th>'; 
         	}
         if($i % 2 == 0){
           $table.= '<tr class="gris">'.$str.'</tr>';

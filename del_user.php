@@ -5,27 +5,28 @@
    <div class="box">
     <div class="textbox">
      <p class="boxName">Supprimer contact :</p>
-     <br>
      <form action="del_user.php" method="post">
       <?php 
       $bdd = new BDD("semaine_PHP");
       if($bdd->getBdd() != null){
-        $userName = $bdd->concatInfo($bdd->getInfo("utilisateur",["prenom","nom"])," ");
-        $idUser = $bdd->concatInfo($bdd->getInfo("utilisateur",["id"])," ");
-        $user = $bdd->merge($userName,$idUser);
-      echo Form::select("user","Prenom",$user)."<br>";
+        $user = $bdd->getInfo("utilisateur",["prenom","nom","id"]);
+      echo "<p>".Form::select("user","Prenom",$user)."</p>";
       }else{
-        echo Form::select("user","Prenom",[])."<br>";
+        echo "<p>".Form::select("user","Prenom",[])."</p>";
       }
-      echo Form::input("delUser","","submit");
+      echo "<p>".Form::input("delUser","","submit")."</p>";
       ?>
     </form>
     <?php  
     if(isset($_POST['delUser'])){
       if($bdd->getBdd() != null){
-        $user = intval($_POST["user"]);
-        $bdd->delInTable("utilisateur",$user);
-        header("Refresh:0");
+        if(isset($_POST["user"])){
+          $user = intval($_POST["user"]);
+          $bdd->delInTable("utilisateur",$user);
+          header("Refresh:0");
+        }else{
+          echo '<script>alert("Aucun contact dans la base de donnée")</script>';
+        }
       }
     }
     ?>
@@ -34,18 +35,16 @@
 <div class="box">
     <div class="textbox">
      <p class="boxName">Mes contacts :</p>
-     <br>
-     <div id="tab">
-      <table>
      <?php
-     $bdd = new BDD("semaine_php");
-     $search = ["id","nom","prenom","ddn","sexe","mail","code_postale"];
-     $tab = $bdd->getInfo("utilisateur",$search);
-     echo TableGenerator::colName($search);
-     echo TableGenerator::trInTable($tab);
+     if($bdd->getBdd() != null){
+       $search = ["id","nom","prenom","ddn","sexe","mail","code_postale"];
+       $tab = $bdd->getInfo("utilisateur",$search);
+       echo '<div id="tab"><table>';
+       echo TableGenerator::colName($search);
+       echo TableGenerator::trInTable($tab);
+       echo "</table></div>";
+      }
      ?>
-     </table>
-     </div>
    </div>
 </div>
 </div>

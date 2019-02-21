@@ -15,5 +15,16 @@ class PostVerif{
 		$secs = $datetime1 - $datetime2;
 		return floor(($secs / 86400) / 364.25);
 	}
+
+	public static function emailInBdd(string $_email,array $_bddEmails){
+		foreach ($_bddEmails as $key) {
+			foreach ($key as $mail) {
+				if($mail == $_email ){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	
 }
