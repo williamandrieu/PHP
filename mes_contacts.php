@@ -36,7 +36,10 @@
                 $mail = $_POST["mail"];
                 $codePostale = $_POST["codePostale"];
 
-                $bdd->createInTable("utilisateur",[$nom,$prenom,$ddn,$sexe,$mail,$codePostale]);
+                $colName = ["nom","prenom","ddn","sexe","mail","code_postale"];
+                $colValue = [$nom,$prenom,$ddn,$sexe,$mail,$codePostale];
+
+                $bdd->createInTable("utilisateur",$colName,$colValue);
               }
             }
           }

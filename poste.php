@@ -6,6 +6,8 @@
     <div class="textbox">
      <p class="boxName">Créer lettre :</p>
      <form action="#" method="post">
+      <p>Message : </p>
+      <textarea id="test" autofocus="true" name="textArea"></textarea>
       <?php 
       $bdd = new BDD("semaine_PHP");
       if($bdd->getBdd() != null){
@@ -28,7 +30,17 @@
         if($_POST['dest'] == $_POST['expe']){
           echo '<script>alert("Le destinataire et l\'éxpediteur sont identique")</script>';
         }else{
-          echo "good";
+          $prioritaire = 0;
+          $confidentiel = 0;
+          if(isset($_POST['prioritaire'])){
+            $prioritaire = 1;
+          }
+          if(isset($_POST['confidentiel'])){
+            $confidentiel = 1;
+          }
+          $colName = ["id_expediteur","id_receveur","message","date","confidentiel","prioritaire"];
+          $colValue = [$_POST['expe'],$_POST['dest'],$_POST['textArea'],"CURRENT_DATE",$confidentiel,$prioritaire];
+          $bdd->createInTable("message",$colName,$colValue);
         }
       }
       ?>

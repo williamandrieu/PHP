@@ -5,6 +5,11 @@ body, html{
     height: 100%;
     margin: 0;
 }
+header{
+  position: sticky;
+    left: 0;
+    top: 0;
+}
 
 .box {
     border: solid #969191 5px;
@@ -82,9 +87,10 @@ footer{
 }
 
 #content{
-    margin-top: 10vw;
+    margin-top: 5vw;
     margin-right: 10vw;
     margin-left: 10vw;
+    margin-bottom: 5vw;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -127,4 +133,12 @@ p{
 }
 .boxName{
   text-align: center;
+}
+.description{
+  color: grey;
+  font-size: 10px;
+}
+#test{
+  height: 20vw;
+  width: 50vw;
 }

@@ -21,14 +21,18 @@ class BDD{
 	public function getBdd(){return $this->bdd;}
 	public function getReq(){return $this->req;}
 
-	public function createInTable(string $_tableName,array $_colName){
+	public function createInTable(string $_tableName,array $_colName,$_colValue){
 		try
 		{
 			$str = "";
-			foreach ($_colName as $key) {
+			foreach ($_colValue as $key) {
 				$str.="'".$key."',";
 			}
-            $this->req = $this->bdd->prepare("INSERT INTO `".$_tableName."` (`nom`, `prenom`, `ddn`, `sexe`, `mail`, `code_postale`) 
+			$str2 = "";
+			foreach ($_colName as $key) {
+				$str2.="`".$key."`,";
+			}
+            $this->req = $this->bdd->prepare("INSERT INTO `".$_tableName."` (".substr($str2, 0,-1).") 
              	VALUES (".substr($str, 0,-1).");");
             $this->execute();
         }catch(Exception $e)
@@ -36,6 +40,21 @@ class BDD{
             $this->alert("Erreur lors de la création d'un utilisateur : ".$e->getMessage());
         }
 	}
+
+	public function updateInTable(string $_tableName,array $_colName,array $_colValue,int $_id){
+        try
+        {
+            $str = "";
+            for ($i=0; $i < count($_colName); $i++) {
+                $str.="`".$_colName[$i]."`= `".$_colValue[$i]."`,";
+            }
+           $this->req = $this->bdd->prepare("UPDATE ".$_tableName." SET ".substr($str, 0,-1)."WHERE `id` = ".$_id);
+           $this->execute();
+       }catch(Exception $e)
+       {
+           $this->alert("Erreur lors de la création d'un utilisateur : ".$e->getMessage());
+       }
+    }
 
 	public function delInTable(string $_tableName,int $_id){
 		try
