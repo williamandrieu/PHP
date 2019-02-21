@@ -1,79 +1,65 @@
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Formulaire</title>
-  <link rel="stylesheet" href="css/style.css">
-  <?php
-  require('src/Form.php');
-  require('src/BDD.php');
-  require('src/Personne.php');
-  $personne = new Personne("Timotei", "Mathis", "03.06.2000", "Homme");
-  $lettreSearch = ["M","P","W"];
-  ?>
-</head>
+<?php include('header.php');
+include('src/Exercices.php');
+?>
 <body>
   <div id="all">
-   <div id="topBar">
-     <img id="logo" src="https://www.itescia.fr/sites/itescia/files/thumbnails/image/logocodingfactory-ptt.jpg">
-     <div id="menu">
-      <ul>
-        <li><a href="index.php">Formulaire</a></li>
-        <li><a class="active" href="index2.php">Delete User</a></li>
-        <li><a href="#menu3">Menu 3</a></li>
-      </ul>
-    </div>
-  </div>
   <div id="content">
-   <div id="box1">
-    <div id="textbox1">
-     <p>   Personne :</p>
+   <div class="box">
+    <div class="textbox">
+     <p class="boxName">Exercices :</p>
      <br>
-     <p>  Prénom : <?php echo $personne->getNom(); ?></p>
-     <p>  Nom : <?php echo $personne->getPrenom(); ?></p>
-     <p>  Date de naissance : <?php echo $personne->getDdn(); ?></p>
-     <p>  Sexe : <?php echo $personne->getSexe(); ?></p>
-     <p>  Age : <?php echo $personne->getAge(); ?></p>
+     <form action="#" method="post">
+       <?php
+        echo Form::input("oldDate","Old date","number");
+        echo Form::input("oldDate","","submit");
+       ?>
+     </form>
+     <form action="#" method="post">
+       <?php
+        echo Form::input("primeNb","Nombre premier","number");
+        echo Form::input("prime","","submit");
+       ?>
+     </form>
+     <form action="#" method="post">
+       <?php
+        echo Form::input("hexaNb","Nombre en hexa","number");
+        echo Form::input("hexa","","submit");
+       ?>
+     </form>
+     <form action="#" method="post">
+       <?php
+        echo Form::input("binNb","Nombre en binaire","number");
+        echo Form::input("bin","","submit");
+       ?>
+     </form>
    </div>
  </div>
- <div id="box1">
-  <div id="textbox1">
-   <p>   Form :</p>
+ <div class="box">
+  <div class="textbox">
+   <p class="boxName">Resultats :</p>
    <br>
-   <form action="index.php" method="post">
-    <?php
-    echo '<p class="need">'.Form::input("prenom","Prenom","text").'</p>';
-    echo '<p class="need">'.Form::input("nom","Nom","text").'</p>';
-    echo '<p class="need">'.Form::input("ddn","Date de naissance","date").'</p>';
-    echo '<p>'.Form::select("sexe","Sexe",[["Homme",0],["Femme",1]]).'</p>';
-    echo "<p>".Form::input("createUser","","submit") ;
-    ?>
-  </form>
-    <?php  
-
-    if(isset($_POST['prenom'])){
-      if($_POST['prenom'] != "" && $_POST['nom'] != "" && $_POST['ddn'] != ""){
-        $bdd = new BDD();
-        if($bdd->getBdd() != null){
-        echo "<p><strong> Le compte de ".$_POST['prenom']." ".$_POST['nom']." a été créé</strong><p>";
-
-        $nom = $_POST["nom"];
-        $prenom = $_POST["prenom"];
-        $ddn = $_POST["ddn"];
-        $sexe = intval($_POST["sexe"]);
-
-        $bdd->createUser($nom,$prenom,$ddn,$sexe);
+   <?php
+        if(isset($_POST['oldDate'])){
+          $date = substr(Exercices::oldDate(intval($_POST['oldDate'])), 0,-5);
+          echo Exercices::name("Old date");
+          echo "<p>l'évenement a eu lieu le <strong>".$date."</strong></p></div>";
         }
-      }else{
-        echo '<style type="text/css">.need{color: red;}</style>';
-      }
-    }
-    ?>
+        if(isset($_POST['prime'])){
+          echo Exercices::name("Nombre premier");
+          echo "<p>".$_POST['primeNb']."</p>";
+        }
+        if(isset($_POST['hexa'])){
+          echo Exercices::name("Nombre en hexa");
+          echo "<p>La valeur <strong>".intval($_POST['hexaNb'])."</strong> en décimal correspond à la valeur <strong>".Exercices::intToHexa(intval($_POST['hexaNb']))."</strong> en Hexa</p>";
+        }
+        if(isset($_POST['bin'])){
+          echo Exercices::name("Nombre en binaire");
+          echo  "<p>Le nombre <strong>".intval($_POST['binNb'])."</strong> en décimal vaut <strong>".Exercices::intToBin(intval($_POST['binNb']))."</strong> en binaire";
+        }
+       ?>
 </div>
 </div>
 </div>
 </div>
 </body>
-<footer>
-  <a id="mathis" href="http://mathistimotei.com/">© Mathis Timotei</a>
-</footer>
-</html>
+<?php require('footer.php'); ?>
